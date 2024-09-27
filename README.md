@@ -1,8 +1,10 @@
 # user-stories-generator
 Generador de historias de usuario estructurado en Gherkin usando LLaMA 3.
 
+---------------------------------------------------------------------------------
 
-Bajar ek ejecutable:
+
+Bajar el ejecutable:
 ```shell
 curl -fsSL https://ollama.com/install.sh | sh
 ```
