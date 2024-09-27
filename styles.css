@@ -1,0 +1,6 @@
+body {
+    background-image: url('https://sii-group.com/sites/default/files/2020-07/HERO_1.jpg'); /* Ensure this path is correct */
+    background-size: cover; /* Cover the whole page */
+    background-position: center; /* Center the background */
+    background-repeat: no-repeat; /* Prevent tiling */
+}
