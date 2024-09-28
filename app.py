@@ -2,23 +2,11 @@ import streamlit as st
 import ollama
 
 # Set page configuration
-#st.set_page_config(page_title="LLaMA 3 AI Generator", layout="wide")
-
-
-# Load CSS styles
-def load_css():
-    with open("styles.css") as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-
-load_css()
-
-
+st.set_page_config(page_title="LLaMA 3 AI Generator", layout="wide")
 
 # Add logo
 logo_path = "logo.gif"  # Change this to your logo file path
 st.image(logo_path, width=100)  # Adjust the width as needed
-
-#st.title("LLaMA 3 AI Generator")
 
 # Function to clear chat history
 def clear_chat():
@@ -49,11 +37,19 @@ def generate_response(gherkin_prompt):
         yield token
 
 # First input for initial user story
-if prompt := st.chat_input(placeholder="Escribe tu historia de usuario"):
-    gherkin_prompt = f'Escribe tu historia de usuario para "{prompt}" en formato Gherkin. Ejemplo: Como un [tipo de usuario], quiero [objetivo] para que [razón]. La historia de usuario debe estar completa en español.'
+if user_input := st.chat_input(placeholder="Escribe el objetivo de la historia de usuario"):
+    gherkin_prompt = (
+        f'Escribe una historia de usuario en formato Gherkin para {user_input}. '
+        f'La historia de usuario debe incluir detalles relevantes y contexto específico:\n'
+        f'- Scenario: Describe el contexto general del escenario.\n'
+        f'- Given: Proporciona el estado inicial del sistema o del usuario.\n'
+        f'- When: Explica la acción que el usuario realiza.\n'
+        f'- Then: Criterio de aceptación.\n'
+        f'La historia debe estar completa en español, incluyendo cualquier caso de uso adicional que sea relevante.'
+    )
     
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    st.chat_message("user", avatar="🧑‍💻").write(prompt)
+    st.session_state.messages.append({"role": "user", "content": user_input})
+    st.chat_message("user", avatar="🧑‍💻").write(user_input)
     
     st.session_state["full_message"] = ""
     st.chat_message("assistant", avatar="🤖").write_stream(generate_response(gherkin_prompt))
@@ -64,11 +60,12 @@ if "messages" in st.session_state and len(st.session_state["messages"]) > 1:
     improvement_input = st.text_input("¿Quieres mejorar la historia de usuario? Escribe tu sugerencia:")
     
     if improvement_input:
-        # Get the last assistant's response to reference
         last_response = st.session_state["messages"][-1]["content"]
-        
-        # Format the improvement request with reference to the previous answer
-        gherkin_improvement_prompt = f'Basado en la siguiente historia de usuario: "{last_response}". Mejora esta historia de usuario según la siguiente sugerencia: "{improvement_input}".'
+        gherkin_improvement_prompt = (
+            f'Basado en la siguiente historia de usuario:\n'
+            f'"{last_response}". Mejora esta historia de usuario según la siguiente sugerencia:\n'
+            f'"{improvement_input}".'
+        )
         
         st.session_state.messages.append({"role": "user", "content": improvement_input})
         st.chat_message("user", avatar="🧑‍💻").write(improvement_input)
