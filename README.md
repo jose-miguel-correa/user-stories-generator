@@ -19,3 +19,27 @@ Bajar modelo:
 ollama pull llama3
 ```
 
+Para ver si el puerto utilizado por defecto está activo:
+```shell
+sudo lsof -i :11434
+```
+
+Cerrar el proceso:
+```shell
+kill -9 <PID>
+```
+
+Ver si llama3 está corriendo como servicio
+```shell
+systemctl list-units --type=service | grep ollama
+```
+
+Detener el servicio encontrado:
+```shell
+sudo systemctl stop ollama.service
+```
+
+Where to find the llama3 model:
+```shell
+/usr/share/ollama/.ollama/models/blobs/
+```
